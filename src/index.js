@@ -11,8 +11,7 @@ fetch("http://localhost:3000/characters")
        
        //adding an event listener
        characterSpan.addEventListener("click", () => { displayCharacter(character);
-
-       });
+     });
 
        //append p to character bar
        characterBar.appendChild(characterSpan);
@@ -55,6 +54,6 @@ document.getElementById("vote-count").textContent = currentCharacter.votes;
 
 //Resets the votes
 const resetButton = document.getElementById("reset-btn");
- resetButton.addEventListener("click", function name(params) {
-    
- })
+ resetButton.addEventListener("click", () => {
+   
+ });
