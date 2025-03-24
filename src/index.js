@@ -1,59 +1,65 @@
 // Your code here
+
 //fetch characters from server and dispaly them in character-bar
-fetch("http://localhost:3000/characters")
-.then(response => response.json())
-.then( characters => {
-    const characterBar = document.getElementById("character-bar");
+document.addEventListener("DOMContentLoaded", () =>{
 
-    characters.forEach(character => {
-       const characterSpan = document.createElement("span");
-       characterSpan.textContent = character.name;
-       
-       //adding an event listener
-       characterSpan.addEventListener("click", () => { displayCharacter(character);
-     });
+const baseURL = "https://flattercuties-backend-tawny.vercel.app/characters";
 
-       //append p to character bar
-       characterBar.appendChild(characterSpan);
+
+const characterBar = document.getElementById("character-bar");
+    const characterName = document.getElementById("name");
+    const characterImage = document.getElementById("image");
+    const voteCount = document.getElementById("vote-count");
+    const voteForm = document.getElementById("votes-form");
+    const voteInput = document.getElementById("votes");
+    const resetButton = document.getElementById("reset-btn");
+  
+    // fetch and display the character list
+    fetch(baseURL)
+      .then(response => response.json())
+      .then(characters => {
+        characters.forEach(character => {
+          const span = document.createElement("span");
+          span.textContent = character.name;
+          span.style.cursor = "pointer";
+  
+          span.addEventListener("click", function () {
+            showCharacterDetails(character);
+          });
+  
+          characterBar.appendChild(span);
+        });
+  
+         
+        if (characters.length > 0) {
+          showCharacterDetails(characters[0]);
+        }
+      });
+        
+        
+    // dispaly the details of a selected character
+    function showCharacterDetails(character) {
+      characterName.textContent = character.name;
+      characterImage.src = character.image;
+      characterImage.alt = character.name;
+      voteCount.textContent = character.votes;
+     
+    }
+  
+   // handle vote submission
+    voteForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      const votesToAdd = parseInt(voteInput.value) || 0;
+      const currentVotes = parseInt(voteCount.textContent);
+      voteCount.textContent = currentVotes + votesToAdd;
+      //clears input after submission
+      voteInput.value = "";
     });
+  
+    //reset votes back to zero
+    resetButton.addEventListener("click", function () {
+      voteCount.textContent = "0";
+    });
+  } );
+ 
 
-});
-
-//function to display characters when clicked
-function displayCharacter(character) {
-    const nameElement = document.getElementById("name");
-    const imageElement = document.getElementById("image");
-    const votesElement = document.getElementById("vote-count");
-
-    nameElement.textContent = character.name;
-    imageElement.src = character.image;
-    imageElement.alt = character.name;
-    votesElement.textContent = character.votes
-}
-
-//updating the number of votes 
-
-const votesForm = document.getElementById("votes-form");
-
-votesForm.addEventListener("submit",  event =>{
-    event.preventDefault();
-
-    const votesInput = document.getElementById("votes");
-    const addVotes = parseInt(votesInput.value);
-
-    if (isNaN(addVotes)) {
-       return alert("Please enter a number!");
-};
-//clears the input after submission
-votesInput.value="";
-
-currentCharacter.votes += addVotes;
-//updates the DOM
-document.getElementById("vote-count").textContent = currentCharacter.votes;
-});
-
-//Resets the votes
-const resetButton = document.getElementById("reset-btn");
- resetButton.addEventListener("click", () => {
-   
- });
